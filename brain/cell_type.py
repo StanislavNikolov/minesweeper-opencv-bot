@@ -1,6 +1,3 @@
-""" The somatosensory area responsible for evaluation of texture and object recognition. """
-
-
 import cv2
 import numpy as np
 from pathlib import Path
@@ -15,10 +12,11 @@ label_str2int = {
     'inside': 8,
     'border': 9,
     'nobody': 10,
-   	'red': 11,
+   	'other': 11,
     'noise': 99
 }
 label_int2str = {v:k for k, v in label_str2int.items()}
+
 
 def process_img(img):
 	return cv2.resize(img, (32, 32)).reshape(-1)
@@ -48,14 +46,12 @@ def make_model(dir: Path):
 
 def run_model(knn, img):
 	pimg = np.expand_dims(process_img(img), axis=0).astype(np.float32)
-	# print(pimg.shape, pimg.dtype)
 	ret, results, neighbours, dist = knn.findNearest(pimg, 1)
 	# print(f"ret:        {ret}")
 	# print(f"result:     {results}")
 	# print(f"neighbours: {neighbours}")
 	# print(f"distance:   {dist}")
 	return ret
-
 
 
 if __name__ == '__main__':
